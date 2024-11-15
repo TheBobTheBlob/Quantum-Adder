@@ -1,0 +1,8 @@
+[project]
+name = "qiskit_simulation" 
+version = "0.1.0"
+description = "Simulation written using qiskit for a college quantum information class"
+requires-python = ">=3.9"
+license = { file = "LICENSE.txt" }
+authors = [{ name = "Punit Turlapati", email = "punitsst@gmail.com" }]
+dependencies = ["qiskit", "qiskit-aer", "python-dotenv", "matplotlib", "jupyter", "pylatexenc"]

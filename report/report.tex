@@ -1,0 +1,63 @@
+\documentclass[reprint, amsmath, amssymb, aps, letterpaper]{revtex4-2}
+
+\usepackage[T1]{fontenc} % Use modern font encodings
+\usepackage{microtype} % Improves typography
+\usepackage{graphicx} % Include figure files
+\usepackage[dvipsnames]{xcolor} % More colours
+\usepackage{circuitikz} % Circuit diagrams
+\usepackage[colorlinks=true, allcolors=NavyBlue]{hyperref} % Hyperlinks
+\usepackage{graphicx} % Resize figures
+
+% \usepackage{enumitem} % Custom lists
+% \setlist{itemsep = 0.25ex}
+
+\usepackage{tikz} % For drawing
+\usetikzlibrary{decorations.pathmorphing, patterns}
+
+\usepackage{tabularray} % Better tables
+\UseTblrLibrary{booktabs} % Booktabs support for tabularray
+
+\NewDocumentEnvironment{onecol}{+b}{%
+\onecolumngrid%
+#1
+\twocolumngrid%
+}{}
+
+\begin{document}
+
+\preprint{APS/123-QED}
+
+\title{Applying Shor Code Error Correction to a Quantum Adder Circuit}
+
+\author{Punit Turlapati}
+\affiliation{Missouri University of Science and Technology, Rolla, Missouri 65409, USA}
+
+\begin{abstract}
+    An adder circuit adds two binary numbers and outputs the sum and carry bits. When implemented on a quantum computer, the adder circuit is susceptible to errors due to noise and decoherence. Error correction is essential to mitigate these errors and improve the reliability of quantum computations. The Shor code is a quantum error correction code that can correct arbitrary errors on a single qubit.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Binary digits can only have two states, 0 and 1. An adder circuit adds two binary numbers and outputs the sum and carry bits. The sum bit is the exclusive OR (XOR) of the two input bits, and the carry bit is the AND of the two input bits. The adder circuit is a fundamental building block in classical and quantum computing. By chaining together this process, binary numbers of arbitrary lengths can be added.
+
+When the adder circuit is implemented on a quantum computer, the inherently unstable nature of quantum bits introduces errors. The errors can be so significant that they render the computation useless. The Shor code is a quantum error correction code that can correct arbitrary errors on a single qubit.
+
+\section{Motivation}
+
+In order to successfully run the adder on a quantum computer, error correction is essential. By applying the Shor code to the adder circuit, we can mitigate errors and improve the reliability of quantum computations.
+
+\section{Formulation of Work}
+
+\subsection{Creating the Basic Gates}
+
+
+
+\section{Results}
+
+\section{Discussion}
+
+\section{Conclusion}
+
+\end{document}
