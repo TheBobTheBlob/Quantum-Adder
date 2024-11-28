@@ -20,5 +20,4 @@ __pycache__
 *.fdb_latexmk
 
 # Other
-*.txt
 *.html
