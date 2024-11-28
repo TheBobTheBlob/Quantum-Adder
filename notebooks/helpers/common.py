@@ -16,14 +16,14 @@ load_dotenv()
 
 def max_count(counts: dict) -> str:
     """
-    Given a dictionary of counts, return the key with the highest value.
+    Given a dictionary of counts, return the key with the highest value
     """
     return max(counts, key=counts.get)
 
 
 def simplify(state: str, mapping: list) -> str:
     """
-    Given a state and a mapping, return the simplified state.
+    Given a state and a mapping, return the simplified state
     """
     simplified = ""
     for i in range(len(mapping)):
@@ -33,7 +33,26 @@ def simplify(state: str, mapping: list) -> str:
     return simplified
 
 
+def logical_register(name: str) -> list:
+    """
+    Return a logical register made out of 9 physical qubits, with a name
+    """
+    return [qiskit.QuantumRegister(1, name), qiskit.QuantumRegister(8, f"{name}l")]
+
+
+
+def plot_old_simulation(job: str, classical_name: str = "meas") -> Figure:
+    service = QiskitRuntimeService(channel="ibm_quantum", instance="ibm-q/open/main", token=os.environ["IBM"])
+    job = service.job("cx0dfvzpx23g008j891g")
+    job_result = job.result()
+    pub_result = job_result[0].data[classical_name].get_counts()
+
+    return plot_histogram(pub_result)
+
 class QuantumComputer(ABC):
+    """
+    Base class for quantum computers simulations
+    """
     def __init__(self, circuit: QuantumCircuit, shots: int = 128):
         self.circuit = circuit
         self.shots = shots
@@ -50,14 +69,20 @@ class QuantumComputer(ABC):
     def simplified(self, mapping: list) -> str:
         return simplify(self.most_common(), mapping)
 
-    def plot(self) -> Figure:
+    def plot(self, filename: None | str = None) -> Figure:
         if self.counts is None:
             raise Exception("No counts to plot.")
 
-        return plot_histogram(self.counts)
+        if filename:
+            return plot_histogram(self.counts, filename=filename, figsize=(20, 10))
+        else:
+            return plot_histogram(self.counts)
 
 
 class RealQuantumComputer(QuantumComputer):
+    """
+    Class to run a quantum circuit on a real quantum computer using IBM Quantum
+    """
     def __init__(self, circuit: QuantumCircuit, shots: int = 128):
         super().__init__(circuit, shots)
         self.token = os.environ["IBM"]
@@ -82,6 +107,9 @@ class RealQuantumComputer(QuantumComputer):
 
 
 class SimulatedQuantumComputer(QuantumComputer):
+    """
+    Class to run a quantum circuit on a simulator using Qiskit Aer
+    """
     def __init__(self, circuit: QuantumCircuit, shots: int = 128):
         super().__init__(circuit, shots)
 

@@ -8,6 +8,14 @@ sum.cx(sum_qreg[1], sum_qreg[2])
 sum.cx(sum_qreg[0], sum_qreg[2])
 
 
+# Custom TRANSVERSAL SUM gate
+transversal_sum_qreg = qiskit.QuantumRegister(3, "q")
+transversal_sum = qiskit.QuantumCircuit(transversal_sum_qreg, name="S")
+
+transversal_sum.cx(transversal_sum_qreg[2], transversal_sum_qreg[1])
+transversal_sum.cx(transversal_sum_qreg[2], transversal_sum_qreg[0])
+
+
 # Custom CARRY gate
 carry_qreg = qiskit.QuantumRegister(4, "q")
 carry = qiskit.QuantumCircuit(carry_qreg, name="C")
@@ -17,6 +25,15 @@ carry.cx(carry_qreg[1], carry_qreg[2])
 carry.ccx(carry_qreg[0], carry_qreg[2], carry_qreg[3])
 
 
+# Custom TRANSVERSAL CARRY gate
+transversal_carry_qreg = qiskit.QuantumRegister(4, "q")
+transversal_carry = qiskit.QuantumCircuit(transversal_carry_qreg, name="C")
+
+transversal_carry.ccx(transversal_carry_qreg[1], transversal_carry_qreg[2], transversal_carry_qreg[3])
+transversal_carry.cx(transversal_carry_qreg[2], transversal_carry_qreg[1])
+transversal_carry.ccx(transversal_carry_qreg[0], transversal_carry_qreg[2], transversal_carry_qreg[3])
+
+
 # Custom REVERSE CARRY gate
 carry_dagger_qreg = qiskit.QuantumRegister(4, "q")
 reverse_carry = qiskit.QuantumCircuit(carry_dagger_qreg, name="CD")
@@ -24,6 +41,19 @@ reverse_carry = qiskit.QuantumCircuit(carry_dagger_qreg, name="CD")
 reverse_carry.ccx(carry_dagger_qreg[0], carry_dagger_qreg[2], carry_dagger_qreg[3])
 reverse_carry.cx(carry_dagger_qreg[1], carry_dagger_qreg[2])
 reverse_carry.ccx(carry_dagger_qreg[1], carry_dagger_qreg[2], carry_dagger_qreg[3])
+
+
+# Custom TRANSVERSAL REVERSE CARRY gate
+transversal_carry_dagger_qreg = qiskit.QuantumRegister(4, "q")
+transversal_reverse_carry = qiskit.QuantumCircuit(transversal_carry_dagger_qreg, name="CD")
+
+transversal_reverse_carry.ccx(
+    transversal_carry_dagger_qreg[0], transversal_carry_dagger_qreg[2], transversal_carry_dagger_qreg[3]
+)
+transversal_reverse_carry.cx(transversal_carry_dagger_qreg[2], transversal_carry_dagger_qreg[1])
+transversal_reverse_carry.ccx(
+    transversal_carry_dagger_qreg[1], transversal_carry_dagger_qreg[2], transversal_carry_dagger_qreg[3]
+)
 
 
 # Custom SHOR SETUP gate
@@ -68,6 +98,8 @@ shor_teardown.cx(shor_teardown_qreg[0], shor_teardown_qreg[6])
 shor_teardown.ccx(shor_teardown_qreg[6], shor_teardown_qreg[3], shor_teardown_qreg[0])
 
 
+# Shor gates
+
 def add_shor_setup(circuit, qubit: list):
     circuit.append(shor_setup, [qubit[0], *qubit[1]])
     return circuit
@@ -78,11 +110,15 @@ def add_shor_teardown(circuit, qubit: list):
     return circuit
 
 
+# Single bit gates
+
+
 def add_x(circuit, qubit: list):
     circuit.x(qubit[0])
     for qubit in qubit[1]:
         circuit.x(qubit)
     return circuit
+
 
 def add_z(circuit, qubit: list):
     circuit.z(qubit[0])
@@ -91,11 +127,24 @@ def add_z(circuit, qubit: list):
     return circuit
 
 
+# Two bit gates
+
+
 def add_cx(circuit, qubit1: list, qubit2: list):
     circuit.cx(qubit1[0], qubit2[0])
     for i in range(8):
         circuit.cx(qubit1[1][i], qubit2[1][i])
     return circuit
+
+
+def add_cz(circuit, qubit1: list, qubit2: list):
+    circuit.cz(qubit1[0], qubit2[0])
+    for i in range(8):
+        circuit.cz(qubit1[1][i], qubit2[1][i])
+    return circuit
+
+
+# Adder circuit gates
 
 
 def add_carry(circuit, qubit1: list, qubit2: list, qubit3: list, qubit4: list):
@@ -116,4 +165,28 @@ def add_sum(circuit, qubit1: list, qubit2: list, qubit3: list):
     circuit.append(sum, [qubit1[0], qubit2[0], qubit3[0]])
     for i in range(8):
         circuit.append(sum, [qubit1[1][i], qubit2[1][i], qubit3[1][i]])
+    return circuit
+
+
+# Transversal adder circuit gates
+
+
+def add_transversal_carry(circuit, qubit1: list, qubit2: list, qubit3: list, qubit4: list):
+    circuit.append(transversal_carry, [qubit1[0], qubit2[0], qubit3[0], qubit4[0]])
+    for i in range(8):
+        circuit.append(transversal_carry, [qubit1[1][i], qubit2[1][i], qubit3[1][i], qubit4[1][i]])
+    return circuit
+
+
+def add_transversal_reverse_carry(circuit, qubit1: list, qubit2: list, qubit3: list, qubit4: list):
+    circuit.append(transversal_reverse_carry, [qubit1[0], qubit2[0], qubit3[0], qubit4[0]])
+    for i in range(8):
+        circuit.append(transversal_reverse_carry, [qubit1[1][i], qubit2[1][i], qubit3[1][i], qubit4[1][i]])
+    return circuit
+
+
+def add_transversal_sum(circuit, qubit1: list, qubit2: list, qubit3: list):
+    circuit.append(transversal_sum, [qubit1[0], qubit2[0], qubit3[0]])
+    for i in range(8):
+        circuit.append(transversal_sum, [qubit1[1][i], qubit2[1][i], qubit3[1][i]])
     return circuit
