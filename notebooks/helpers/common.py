@@ -43,11 +43,11 @@ def logical_register(name: str) -> list:
 
 def plot_old_simulation(job: str, classical_name: str = "meas") -> Figure:
     service = QiskitRuntimeService(channel="ibm_quantum", instance="ibm-q/open/main", token=os.environ["IBM"])
-    job = service.job("cx0dfvzpx23g008j891g")
-    job_result = job.result()
+    job_service = service.job(job)
+    job_result = job_service.result()
     pub_result = job_result[0].data[classical_name].get_counts()
 
-    return plot_histogram(pub_result)
+    return plot_histogram(pub_result, figsize=(20, 10))
 
 class QuantumComputer(ABC):
     """
